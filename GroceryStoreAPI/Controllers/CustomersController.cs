@@ -45,7 +45,7 @@ namespace GroceryStoreAPI.Controllers
 
             int? newId = repo.Add(newCustomer);
 
-            if (newId.HasValue)
+            if (newId.HasValue && !string.IsNullOrEmpty(newCustomer.name))
             {
                 return CreatedAtAction(nameof(Get), new { id = newId }, newCustomer);
             }
@@ -61,6 +61,9 @@ namespace GroceryStoreAPI.Controllers
         {
             // Just in case there was anything amiss, make sure we're editing the right item
             customer.id = id;
+            // And don't allow empty names
+            if (string.IsNullOrEmpty(customer.name))
+                return BadRequest(customer);
 
             if (repo.Update(customer))
             {

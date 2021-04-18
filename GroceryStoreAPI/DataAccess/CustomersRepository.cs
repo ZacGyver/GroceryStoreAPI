@@ -128,7 +128,7 @@ namespace GroceryStoreAPI.DataAccess
         {
             // Find the customer if in the database...
             Customer dbCust = database.customers.Where(c => c.id == customer.id).FirstOrDefault();
-            if (dbCust.id.HasValue)
+            if (dbCust != null && dbCust.id.HasValue)
             {
                 dbCust.name = customer.name;
                 return SaveDatabase();
