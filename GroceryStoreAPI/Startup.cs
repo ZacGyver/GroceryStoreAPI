@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+using GroceryStoreAPI.DataAccess;
 
 namespace GroceryStoreAPI
 {
@@ -19,15 +22,21 @@ namespace GroceryStoreAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            // Lets just get directly to the quick results here, not bothering with a repo factory, just direct to our single repository...
+            services.AddScoped<ICustomersRepository, CustomersRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // I don't know if this fits the scope of the sample project, but ... always use https, and of course netcore has an easy mode solution:
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 
